@@ -1,5 +1,5 @@
 import socket
-import tkinter
+import sys
 
 # Configurar la conexión al servidor
 host = "localhost"
@@ -14,6 +14,11 @@ try:
 
     # Enviar una pregunta al servidor
         question = input("cual es tu pregunta: \n")
+
+        if question == "exit":
+            s.close()
+            sys.exit(0)
+
         s.send(question.encode())
 
         # Recibir la respuesta del servidor
