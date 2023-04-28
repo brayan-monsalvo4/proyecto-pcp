@@ -13,21 +13,23 @@ def main():
     usuario = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     #establecemos un timeout de 10 segundos, si no responde el servidor el programa se cerrara automaticamente.
-    usuario.settimeout(10)
+    usuario.settimeout(20)
 
     cprint("Uso: introduce cualquier cosa que quieras preguntar. Para salir escribe exit o presiona Ctrl + C", color="light_magenta", attrs=["bold"])
 
     try:
+        #se conecta al servidor
+        usuario.connect((host, port))
+
         while True:
             #mensaje introducido por el usuario
             mensaje = input(colored("Usuario: ", color="cyan", attrs=["bold"]))
 
-            #si el mensaje es exit, se lanza una KeyboardException
+            #si el mensaje es un exit, se lanza una interrupcion de teclado y termina el programa
             if mensaje == "exit":
-                raise KeyboardInterrupt  
+                raise KeyboardInterrupt
 
-            #se conecta al servidor y le manda el mensaje del usuario
-            usuario.connect((host, port))
+            #manda el mensaje del usuario
             usuario.send(mensaje.encode())
 
             #guarda la respuesta y la imprime en la terminal
@@ -53,8 +55,14 @@ def main():
         sys.exit(0)
 
     #exception especial para finalizar el programa con "exit" o Ctrl + C
+    #al cerrar el programa de esta manera, se envia el mensaje "exit" al servidor, asegurando una
+    #desconexion segura 
     except KeyboardInterrupt:
         print(colored("\nHasta luego!", color="light_blue", attrs=["bold"]))
+
+        mensaje = "exit"
+        usuario.send(mensaje.encode())
+
         usuario.close()
         sys.exit(0)
 
