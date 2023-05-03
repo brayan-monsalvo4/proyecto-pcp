@@ -28,7 +28,7 @@ class ChatGPT:
             messages = self.contexto
         )
 
-        #pero primeor necesitamos extraer la respuesta que esta dentro del 
+        #pero primero necesitamos extraer la respuesta que esta dentro del 
         #json que devolvio la api, asi que se extrae y se guarda en respuesta
         respuesta = response["choices"][0]["message"]["content"]
 
@@ -36,5 +36,5 @@ class ChatGPT:
         #por eso tiene el rol de "asistente"
         self.contexto.append({"role":"assistant", "content":respuesta})
 
-        #finalmente, se retorna unicamente la respuesta, unicamente el string vaya xd
+        #finalmente, se retorna unicamente la respuesta, el puro string xd
         return respuesta
